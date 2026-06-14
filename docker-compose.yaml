@@ -1,0 +1,36 @@
+services:
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  
+  chromadb:
+    image: chromadb/chroma
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - chroma_data:/chroma/chroma
+
+  app:
+    build: ./app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ollama
+      - chromadb
+
+volumes:
+  ollama_data:
+  chroma_data:
