@@ -14,7 +14,7 @@ def query_rag(question: str) -> str:
         n_results=1
     )["documents"][0]
 
-    context = ' '.join(documents)
+    context = "\n---\n".join(documents)
 
     print(f"{context = }")
 
@@ -23,15 +23,22 @@ def query_rag(question: str) -> str:
         options={"temperature": 0},
         messages=
         [
-            {
-                "role": "user",
-                "content": f"""Extract the exact answer verbatim from the text.
-If not present, return "NOT FOUND".
-
-Text: {context}
-Question: {question}
-Answer:"""
-            }
+        {
+            "role": "system",
+            "content": (
+                "You are a precise information extraction assistant.\n"
+                "Rules:\n"
+                "1. Answer ONLY using the information in the provided text.\n"
+                "2. Do NOT use prior knowledge or assumptions.\n"
+                "3. Return the shortest accurate answer found in the text.\n"
+                "4. If the answer is not in the text, return exactly: NOT FOUND\n"
+                "5. Never explain, justify, or add context to your answer."
+            )
+        },
+        {
+            "role": "user",
+            "content": f"Text:\n{context}\n\nQuestion: {question}"
+        }
         ]
     ).message.content
 
