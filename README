@@ -3,7 +3,9 @@
 2. Pull the Ollama LLM models from the internet: `./scripts/pull_models.sh`
 
 ## TODOs
-- FastAPI for ingest & query
+- FastAPI for ingest & query (barebones / LangChain endpoints)
+- Make shared folder for storing actual docs
+- LangFuse + Guardrails for trazability + security
 - FastMCP for tools
-- LangChain + Milvus as an alternative
+- Milvus as an alternative vectorDB
 - nginx frontend
